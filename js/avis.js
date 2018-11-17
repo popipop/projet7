@@ -37,8 +37,8 @@ function restos () {
       myLatLng.lng = resto.long;
       locations.push(myLatLng);
     });
+    $(afficherMap(cleMap));
   });
-  afficherMap(cleMap);
 }
 
 function geoloc () {
