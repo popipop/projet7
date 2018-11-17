@@ -1,3 +1,6 @@
 /* --------------- Appels aux fonctions ------------------ */
 
-$(afficherMap(cleMap));
+//$(afficherMap(cleMap));
+
+//$(restos());
+$(geoloc());

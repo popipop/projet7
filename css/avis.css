@@ -7,3 +7,11 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+.colRestos {
+  color: white;
+}
+
+h3 {
+  text-align: center;
+}

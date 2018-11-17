@@ -2,6 +2,7 @@
 
 // initialisation map avec coordonnées de Paris
 var map;
-var latParis = 48.8737815;
-var lngParis = 2.3501649;
+var latCenter = 48.860423;
+var lngCenter = 2.339289;
 var cleMap = "AIzaSyBNlWN_Lo_btGPERPwWjAHufTyL6_okYP0";
+var locations = [];
