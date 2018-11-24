@@ -8,6 +8,8 @@
   <!-- Materialize compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="css/avis.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+  <link rel="stylesheet" href="css/nouislider.css">
 </head>
 <body>
 
@@ -16,7 +18,8 @@
 
     <div class="col s3 grey main colRestos">
       <h3>Liste des restaurants</h3>
-      <div id="restos"></div>
+      <div id="stars-slider"></div>
+      <ul class="collapsible" id="restos"></ul>
     </div>
 
     <div class="col s9 green main">
@@ -27,12 +30,14 @@
 
 
   <!-- Materialize compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="https://code.jquery.com/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBn5VqrB_xDjGcFUaoZ-rzR_Q6pB1g75kQ"></script>
   <script src="js/settings.js"></script>
-  <script src="cle/cle.js"></script>
-  <script src="js/avis.js"></script>
-  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/restaurants.js"></script>
+  <script src="js/nouislider.js"></script>
   <script src="js/controller.js"></script>
 </body>
 </html>

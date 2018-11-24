@@ -1,6 +1,6 @@
 /* --------------- Appels aux fonctions ------------------ */
 
-//$(afficherMap(cleMap));
-
-//$(restos());
-$(geoloc());
+carte.geoloc();
+carte.initMap();
+restaurants.creer_liste_restos();
+restaurants.filtrer_restaurants();

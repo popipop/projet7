@@ -15,3 +15,7 @@ html, body {
 h3 {
   text-align: center;
 }
+
+.collapsible-header {
+  background-color: #C3EDB2;
+}
