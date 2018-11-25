@@ -6,21 +6,21 @@ var restaurants = {
   creer_liste_restos: function () {
     $.getJSON("src/restaurants.json", function (json) {
       $.each(json, function (index, resto) {
-        $('#restos').append('<li><div class="collapsible-header">'
+        $('#restos').append('<li><div class="waves-effect collapsible-header">'
           + resto.restaurantName
           + '</div>'
-          + '<div class="collapsible-body"><span><p>'
+          + '<div class="collapsible-body"><p><i class="material-icons">location_on</i> '
           + resto.address
           + '</p>'
           + restaurants.afficher_image_streetview(resto)
           + restaurants.creer_liste_avis(resto)
-          + '</span></div></li>');
+          + '</div></li>');
         $('.collapsible').collapsible();
         var position_resto = {
           lat: resto.lat,
           lng: resto.long
         };
-        carte.creer_marker(position_resto, "red");
+        carte.creer_marker(position_resto, "red", resto.restaurantName);
       });
       restaurants.afficher_stars();
     });
@@ -57,18 +57,19 @@ var restaurants = {
   },
 
   filtrer_restaurants: function () {
-    var skipSlider = document.getElementById('stars-slider');
-    noUiSlider.create(skipSlider, {
-        range: {
-            'min': 0,
-            '20%': 1,
-            '40%': 2,
-            '60%': 3,
-            '80%': 4,
-            'max': 5
-        },
-        snap: true,
-        start: [0, 5]
-    });
+    var slider = document.getElementById('stars-slider');
+      noUiSlider.create(slider, {
+      start: [0, 5],
+      connect: true,
+      step: 1,
+      orientation: 'horizontal', // 'horizontal' or 'vertical'
+      range: {
+        'min': 0,
+        'max': 5
+      },
+      format: wNumb({
+        decimals: 0
+      })
+      });
   }
 }

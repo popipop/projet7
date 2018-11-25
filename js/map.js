@@ -8,14 +8,15 @@ var carte = {
   },
 
   // Créer un marqueur
-  creer_marker: function (position, color) {
+  creer_marker: function (position, color, titre) {
     var url = "http://maps.google.com/mapfiles/ms/icons/" + color + "-dot.png";
     var marker = new google.maps.Marker({
       position,
       map: map,
       icon: {
         url
-      }
+      },
+      title: titre
     });
   },
 
@@ -28,7 +29,7 @@ var carte = {
           lng: position.coords.longitude
         }
         carte.initMap();
-        carte.creer_marker(pos, "blue");
+        carte.creer_marker(pos, "blue", "Vous êtes ici");
       });
     }
   }

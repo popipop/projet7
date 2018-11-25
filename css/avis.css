@@ -8,14 +8,22 @@ html, body {
   padding: 0;
 }
 
-.colRestos {
-  color: white;
-}
-
 h3 {
   text-align: center;
 }
 
+#stars-slider {
+  margin-bottom: 30px;
+}
+
+.collapsible {
+  margin-top: 20px;
+}
+
 .collapsible-header {
-  background-color: #C3EDB2;
+  font-size: 1.2em;
+}
+
+.collapsible-header:hover, li.active .collapsible-header {
+  background-color: #eeeeee;
 }
