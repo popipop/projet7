@@ -1,64 +1,60 @@
 var restaurants = {
 
-  liste_stars: [],
-
   // Afficher la liste des restaurants du fichier JSON
   creer_liste_restos: function () {
     $.getJSON("src/restaurants.json", function (json) {
       $.each(json, function (index, resto) {
-        $('#restos').append('<li><div class="waves-effect collapsible-header">'
-          + resto.restaurantName
-          + '</div>'
-          + '<div class="collapsible-body"><p><i class="material-icons">location_on</i> '
-          + resto.address
-          + '</p>'
-          + restaurants.afficher_image_streetview(resto)
-          + restaurants.creer_liste_avis(resto)
-          + '</div></li>');
-        $('.collapsible').collapsible();
-        var position_resto = {
-          lat: resto.lat,
-          lng: resto.long
-        };
-        carte.creer_marker(position_resto, "red", resto.restaurantName);
+        restaurants.afficher_descriptif(resto);
       });
-      restaurants.afficher_stars();
     });
   },
 
-  creer_liste_avis: function (resto) {
-    var liste_avis = '';
+  // Affichage de chaque restaurant dans la liste
+  afficher_descriptif: function (resto) {
+    var li = $('<li>').appendTo('#restos');
+    $('<div>').addClass('waves-effect collapsible-header').text(resto.restaurantName).appendTo(li);
+    var div = $('<div>').addClass('collapsible-body').appendTo(li);
+    var p = $('<p>').appendTo(div);
+    $('<i>').addClass('material-icons').text('location_on').appendTo(p);
+    $('<span>').text(resto.address).appendTo(p);
+    $(restaurants.afficher_image_streetview(resto)).appendTo(div);
+    var moy = 0;
     $.each(resto.ratings, function (index, rating) {
-      restaurants.liste_stars.push(rating.stars);
-      var id_avis = 'stars' + restaurants.liste_stars.length;
-      liste_avis += '<p><span id = "' + id_avis + '"></span></p>' + '<p>' + rating.comment + '</p>';
+      moy += rating.stars;
+      var div_stars = $('<div>').addClass('stars').appendTo(div);
+      $('<p>').rateYo({
+        rating: rating.stars,
+        readOnly: true
+      }).appendTo(div_stars);
+      $('<p>').text(rating.comment).appendTo(div_stars);
     });
-    return liste_avis;
+    if (resto.ratings.length > 0) {
+      moy = moy / resto.ratings.length;
+    }
+    $('<input>').attr('type','hidden').val(moy).appendTo(div);
+    $('.collapsible').collapsible();
+    var position_resto = {
+      lat: resto.lat,
+      lng: resto.long
+    }
+    carte.creer_marker(position_resto, "red", resto.restaurantName);
   },
 
+  // Affichage de l'image Streetview du restaurant
   afficher_image_streetview: function (resto) {
     var image_streetview = '<img src='
       + '"https://maps.googleapis.com/maps/api/streetview?size=120x120&location='
       + resto.lat + ',' + resto.long
-      + '&heading=151.78&pitch=-0.76&key='
+      + '&key='
       + cleMap
       + '">';
     return image_streetview;
   },
 
-  afficher_stars: function () {
-    for (var i = 0; i < restaurants.liste_stars.length; i++) {
-      var id_avis = "#stars" + (i + 1);
-      $(id_avis).rateYo({
-        rating: restaurants.liste_stars[i],
-        readOnly: true
-      });
-    }
-  },
-
+  // Gestion du filtre par note
   filtrer_restaurants: function () {
     var slider = document.getElementById('stars-slider');
-      noUiSlider.create(slider, {
+    noUiSlider.create(slider, {
       start: [0, 5],
       connect: true,
       step: 1,
@@ -70,6 +66,16 @@ var restaurants = {
       format: wNumb({
         decimals: 0
       })
+    });
+    slider.noUiSlider.on('set.one', function (value) {
+      var lesRestos = $('#restos li');
+      lesRestos.each(function() {
+        $(this).hide();
+        var moyResto = $(this).find('input').val();
+        if (moyResto >= value[0] && moyResto <= value[1]) {
+          $(this).show();
+        }
       });
+    });
   }
 }
