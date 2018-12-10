@@ -11,33 +11,74 @@ var restaurants = {
 
   // Affichage de chaque restaurant dans la liste
   afficher_descriptif: function (resto) {
-    var li = $('<li>').appendTo('#restos');
-    $('<div>').addClass('waves-effect collapsible-header').text(resto.restaurantName).appendTo(li);
+    var idResto = 'resto' + $('.collapsible li').length;
+    var li = $('<li>').attr('id', idResto).appendTo('#restos');
+    var divHeader = $('<div>').addClass('waves-effect collapsible-header').appendTo(li);
+    $('<span>').text(resto.restaurantName).appendTo(divHeader);
+    var starsHeader = $('<span>').addClass('starsHeader').appendTo(divHeader);
+    var moyHeader = $('<div>').addClass('moyHeader').appendTo(divHeader);
     var div = $('<div>').addClass('collapsible-body').appendTo(li);
+    var a = $('<a>').addClass("waves-effect waves-light btn avis").text('Donner mon avis').appendTo(div);
     var p = $('<p>').appendTo(div);
     $('<i>').addClass('material-icons').text('location_on').appendTo(p);
     $('<span>').text(resto.address).appendTo(p);
     $(restaurants.afficher_image_streetview(resto)).appendTo(div);
-    var moy = 0;
     $.each(resto.ratings, function (index, rating) {
-      moy += rating.stars;
       var div_stars = $('<div>').addClass('stars').appendTo(div);
-      $('<p>').rateYo({
-        rating: rating.stars,
-        readOnly: true
-      }).appendTo(div_stars);
-      $('<p>').text(rating.comment).appendTo(div_stars);
+      restaurants.ajouter_stars(rating.stars, rating.comment, div_stars);
     });
-    if (resto.ratings.length > 0) {
-      moy = moy / resto.ratings.length;
-    }
-    $('<input>').attr('type','hidden').val(moy).appendTo(div);
     $('.collapsible').collapsible();
     var position_resto = {
       lat: resto.lat,
       lng: resto.long
+    };
+    $(a).click(function() {
+      $('#idResto').val(idResto);
+      $("#monRateYo").rateYo({
+        rating: 3,
+        fullStar: true
+      });
+      var elem = document.getElementById('modal2');
+      var instance = M.Modal.getInstance(elem);
+      instance.open();
+    });
+    this.afficher_moy(idResto);
+    var numMarker = carte.creer_marker(position_resto, "red", resto.restaurantName);
+    $('<input>').attr('type', 'hidden').addClass('numMarker').val(numMarker).appendTo(divHeader);
+  },
+
+  // Afficher la moyenne
+  afficher_moy: function (idResto) {
+    var cible = '#' + idResto + ' .stars';
+    var moy = 0;
+    $(cible).each(function (index, element) {
+      moy += Number($(this).find('.note').val());
+    });
+    if ($(cible).length != 0) {
+      moy = moy / $(cible).length;
     }
-    carte.creer_marker(position_resto, "red", resto.restaurantName);
+    var starsHeader = $('#'+idResto).find('.starsHeader');
+    var moyHeader = $('#'+idResto).find('.moyHeader');
+    starsHeader.find('span').remove();
+    $('<span>').rateYo({
+      rating: moy,
+      readOnly: true
+    }).appendTo(starsHeader);
+    moyHeader.find('input').remove();
+    $('<input>').attr('type','hidden').addClass('moyResto').val(moy).appendTo(moyHeader);
+  },
+
+  // Ajouter étoiles
+  ajouter_stars: function (note, commentaire, element, idResto) {
+    $('<p>').rateYo({
+      rating: note,
+      readOnly: true
+    }).appendTo(element);
+    $('<p>').text(commentaire).appendTo(element);
+    $('<input>').attr('type', 'hidden').addClass('note').val(note).appendTo(element);
+    if (idResto) {
+      this.afficher_moy(idResto);
+    }
   },
 
   // Affichage de l'image Streetview du restaurant
@@ -71,9 +112,12 @@ var restaurants = {
       var lesRestos = $('#restos li');
       lesRestos.each(function() {
         $(this).hide();
-        var moyResto = $(this).find('input').val();
+        var numMarker = $(this).find('.numMarker').val();
+        markers[numMarker - 1].setMap(null);
+        var moyResto = $(this).find('.moyResto').val();
         if (moyResto >= value[0] && moyResto <= value[1]) {
           $(this).show();
+          markers[numMarker - 1].setMap(map);
         }
       });
     });

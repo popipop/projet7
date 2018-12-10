@@ -1,14 +1,11 @@
 var carte = {
+  
   // initialiasation map
   initMap: function () {
     map = new google.maps.Map(document.getElementById('map'), {
       center: pos,
       zoom: 13
     });
-
-    // Initialiser modal
-    var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems);
 
     var geocoder = new google.maps.Geocoder;
 
@@ -26,7 +23,6 @@ var carte = {
         if (status === 'OK') {
           if (results[0]) {
             monResto.address = results[0].formatted_address;
-            monResto.restaurantName = 'Le super Resto';
           } else {
             window.alert('No results found');
           }
@@ -48,6 +44,8 @@ var carte = {
       },
       title: titre
     });
+    markers.push(marker);
+    return markers.length;
   },
 
   // Gestion de la géolocalisation

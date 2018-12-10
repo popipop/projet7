@@ -31,7 +31,7 @@
 
   </div>
 
-  <!-- Modal Structure -->
+  <!-- Modal1 Structure -->
   <div id="modal1" class="modal">
     <div class="modal-content">
       <label for="nomResto">Entrez le nom du restaurant :</label>
@@ -40,6 +40,32 @@
     <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="validation">Soumettre</a>
     </div>
+  </div>
+
+  <!-- Modal2 Structure -->
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      <div class="row">
+        <form class="col s12">
+          <div class="row">
+            <div class="col s12">
+              <p>Donner une note</p>
+              <div id="monRateYo"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea id="monAvis" class="materialize-textarea"></textarea>
+              <label for="monAvis">Faire un commentaire</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="validationNote">Soumettre</a>
+    </div>
+    <input type="hidden" id="idResto">
   </div>
 
   <script src="https://code.jquery.com/jquery.min.js"></script>
