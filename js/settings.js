@@ -5,11 +5,13 @@ var cleMap = "AIzaSyBn5VqrB_xDjGcFUaoZ-rzR_Q6pB1g75kQ";
 var map;
 var monResto ={};
 var pos = {
-  lat: 48.860423,
-  lng: 2.339289
+  lat: 48.88091655382385,
+  lng: 2.3465631508483966
 };
 var locations = [];
 var markers = [];
+var service;
+var infowindow;
 
 /* --------- Initialisation modal ------*/
 
@@ -36,8 +38,8 @@ $('#validationNote').click(function() {
   maNote = $('#monRateYo').rateYo('rating');
   var cible = '#' + $('#idResto').val() + ' .collapsible-body';
   var div = $(cible);
-  var div_stars = $('<div>').addClass('stars').appendTo(div);
-  if (maNote && monCommentaire) {
+  if (monCommentaire) {
+    var div_stars = $('<div>').addClass('stars').appendTo(div);
     restaurants.ajouter_stars(maNote, monCommentaire, div_stars, $('#idResto').val());
   };
   $('#monRateYo').rateYo('rating', 3);

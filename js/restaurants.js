@@ -42,20 +42,24 @@ var restaurants = {
       var instance = M.Modal.getInstance(elem);
       instance.open();
     });
-    this.afficher_moy(idResto);
+    this.afficher_moy(idResto, resto.ratingPlace);
     var numMarker = carte.creer_marker(position_resto, "red", resto.restaurantName);
     $('<input>').attr('type', 'hidden').addClass('numMarker').val(numMarker).appendTo(divHeader);
   },
 
   // Afficher la moyenne
-  afficher_moy: function (idResto) {
+  afficher_moy: function (idResto, ratingPlace) {
     var cible = '#' + idResto + ' .stars';
     var moy = 0;
-    $(cible).each(function (index, element) {
-      moy += Number($(this).find('.note').val());
-    });
-    if ($(cible).length != 0) {
-      moy = moy / $(cible).length;
+    if (ratingPlace) {
+      moy = ratingPlace;
+    } else {
+      $(cible).each(function (index, element) {
+        moy += Number($(this).find('.note').val());
+      });
+      if ($(cible).length != 0 || moy != 0) {
+        moy = moy / $(cible).length;
+      }
     }
     var starsHeader = $('#'+idResto).find('.starsHeader');
     var moyHeader = $('#'+idResto).find('.moyHeader');

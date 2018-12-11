@@ -4,7 +4,7 @@ var carte = {
   initMap: function () {
     map = new google.maps.Map(document.getElementById('map'), {
       center: pos,
-      zoom: 13
+      zoom: 15
     });
 
     var geocoder = new google.maps.Geocoder;
@@ -14,6 +14,8 @@ var carte = {
       monResto = {};
       monResto.lat = e.latLng.lat();
       monResto.long = e.latLng.lng();
+      console.log('lat : '+ monResto.lat);
+      console.log('long : ' + monResto.long);
       monResto.ratings = [];
       $('#nomResto').val('');
       var elem = document.getElementById('modal1');
@@ -31,6 +33,33 @@ var carte = {
         }
       });
     });
+
+    // Initialisation api place
+    infowindow = new google.maps.InfoWindow();
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch({
+      location: pos,
+      radius: 1000,
+      type: ['restaurant']
+    }, this.callback);
+  },
+
+  // afficher emplacements google place
+  callback: function (results, status) {
+    console.log(results);
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        var placeName = results[i].name;
+        var restoPlace = {};
+        restoPlace.restaurantName = placeName;
+        restoPlace.address = results[i].vicinity;
+        restoPlace.lat = results[i].geometry.location.lat();
+        restoPlace.long = results[i].geometry.location.lng();
+        restoPlace.ratings = [];
+        restoPlace.ratingPlace = results[i].rating;
+        restaurants.afficher_descriptif(restoPlace);
+      }
+    }   
   },
 
   // Créer un marqueur
