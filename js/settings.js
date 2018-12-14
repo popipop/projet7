@@ -3,6 +3,7 @@
 // initialisation map avec coordonnées de Paris
 var cleMap = "AIzaSyBn5VqrB_xDjGcFUaoZ-rzR_Q6pB1g75kQ";
 var map;
+var service;
 var monResto ={};
 var pos = {
   lat: 48.88091655382385,

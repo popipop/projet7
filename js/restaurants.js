@@ -9,7 +9,7 @@ var restaurants = {
     });
   },
 
-  // Affichage de chaque restaurant dans la liste
+  // Affichage de chaque restaurant en fonction de l'objet resto
   afficher_descriptif: function (resto) {
     var idResto = 'resto' + $('.collapsible li').length;
     var li = $('<li>').attr('id', idResto).appendTo('#restos');
@@ -32,6 +32,8 @@ var restaurants = {
       lat: resto.lat,
       lng: resto.long
     };
+
+    // event click sur le bouton "donner mon avis"
     $(a).click(function() {
       $('#idResto').val(idResto);
       $("#monRateYo").rateYo({
@@ -64,10 +66,12 @@ var restaurants = {
     var starsHeader = $('#'+idResto).find('.starsHeader');
     var moyHeader = $('#'+idResto).find('.moyHeader');
     starsHeader.find('span').remove();
-    $('<span>').rateYo({
-      rating: moy,
-      readOnly: true
-    }).appendTo(starsHeader);
+    if ($(cible).length != 0) {
+      $('<span>').rateYo({
+        rating: moy,
+        readOnly: true
+      }).appendTo(starsHeader);
+    }
     moyHeader.find('input').remove();
     $('<input>').attr('type','hidden').addClass('moyResto').val(moy).appendTo(moyHeader);
   },

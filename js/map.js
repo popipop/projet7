@@ -36,7 +36,7 @@ var carte = {
 
     // Initialisation api place
     infowindow = new google.maps.InfoWindow();
-    var service = new google.maps.places.PlacesService(map);
+    service = new google.maps.places.PlacesService(map);
     service.nearbySearch({
       location: pos,
       radius: 1000,
@@ -49,17 +49,30 @@ var carte = {
     console.log(results);
     if (status === google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
-        var placeName = results[i].name;
-        var restoPlace = {};
-        restoPlace.restaurantName = placeName;
-        restoPlace.address = results[i].vicinity;
-        restoPlace.lat = results[i].geometry.location.lat();
-        restoPlace.long = results[i].geometry.location.lng();
-        restoPlace.ratings = [];
-        restoPlace.ratingPlace = results[i].rating;
-        restaurants.afficher_descriptif(restoPlace);
+        var request = {
+          placeId : results[i].place_id,
+          fields: ['name', 'formatted_address', 'geometry', 'rating', 'reviews']
+        }
+        service.getDetails(request, function (place, status) {
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+            var restoPlace = {};
+            restoPlace.restaurantName = place.name;
+            restoPlace.address = place.formatted_address;
+            restoPlace.lat = place.geometry.location.lat();
+            restoPlace.long = place.geometry.location.lng();
+            restoPlace.ratingPlace = place.rating;
+            restoPlace.ratings = [];
+            for (var i = 0; i < place.reviews.length; i++) {
+              var rating = {};
+              rating.stars = place.reviews[i].rating;
+              rating.comment = place.reviews[i].text;
+              restoPlace.ratings.push(rating);
+            }
+            restaurants.afficher_descriptif(restoPlace);
+          }
+        });
       }
-    }   
+    }
   },
 
   // Créer un marqueur
