@@ -11,12 +11,14 @@ var restaurants = {
 
   // Affichage de chaque restaurant en fonction de l'objet resto
   afficher_descriptif: function (resto) {
+
+    // Générer le code html
     var idResto = 'resto' + $('.collapsible li').length;
     var li = $('<li>').attr('id', idResto).appendTo('#restos');
-    var divHeader = $('<div>').addClass('waves-effect collapsible-header').appendTo(li);
+    var divHeader = $('<div>').addClass('waves-effect collapsible-header').css('text-align', 'right').appendTo(li);
     $('<span>').text(resto.restaurantName).appendTo(divHeader);
     var starsHeader = $('<span>').addClass('starsHeader').appendTo(divHeader);
-    var moyHeader = $('<div>').addClass('moyHeader').appendTo(divHeader);
+    var moyHeader = $('<span>').addClass('moyHeader').appendTo(divHeader);
     var div = $('<div>').addClass('collapsible-body').appendTo(li);
     var a = $('<a>').addClass("waves-effect waves-light btn avis").text('Donner mon avis').appendTo(div);
     var p = $('<p>').appendTo(div);
@@ -27,11 +29,18 @@ var restaurants = {
       var div_stars = $('<div>').addClass('stars').appendTo(div);
       restaurants.ajouter_stars(rating.stars, rating.comment, div_stars);
     });
+
+    // lancer le collapsible
     $('.collapsible').collapsible();
+
+    // Afficher la moyenne et le marker
     var position_resto = {
       lat: resto.lat,
       lng: resto.long
     };
+    this.afficher_moy(idResto, resto.ratingPlace);
+    var numMarker = carte.creer_marker(position_resto, "red", resto.restaurantName);
+    $('<input>').attr('type', 'hidden').addClass('numMarker').val(numMarker).appendTo(divHeader);
 
     // event click sur le bouton "donner mon avis"
     $(a).click(function() {
@@ -44,9 +53,6 @@ var restaurants = {
       var instance = M.Modal.getInstance(elem);
       instance.open();
     });
-    this.afficher_moy(idResto, resto.ratingPlace);
-    var numMarker = carte.creer_marker(position_resto, "red", resto.restaurantName);
-    $('<input>').attr('type', 'hidden').addClass('numMarker').val(numMarker).appendTo(divHeader);
   },
 
   // Afficher la moyenne
@@ -102,6 +108,8 @@ var restaurants = {
 
   // Gestion du filtre par note
   filtrer_restaurants: function () {
+
+    // initialisation du filtre
     var slider = document.getElementById('stars-slider');
     noUiSlider.create(slider, {
       start: [0, 5],
@@ -116,6 +124,8 @@ var restaurants = {
         decimals: 0
       })
     });
+
+    // event on sur le filtre
     slider.noUiSlider.on('set.one', function (value) {
       var lesRestos = $('#restos li');
       lesRestos.each(function() {

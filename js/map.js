@@ -4,7 +4,7 @@ var carte = {
   initMap: function () {
     map = new google.maps.Map(document.getElementById('map'), {
       center: pos,
-      zoom: 15
+      zoom: zoom
     });
 
     var geocoder = new google.maps.Geocoder;
@@ -33,20 +33,21 @@ var carte = {
         }
       });
     });
+  },
 
-    // Initialisation api place
+  // initialisation api places
+  places: function (pos) {
     infowindow = new google.maps.InfoWindow();
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch({
       location: pos,
-      radius: 1000,
+      radius: radius,
       type: ['restaurant']
     }, this.callback);
   },
 
   // afficher emplacements google place
   callback: function (results, status) {
-    console.log(results);
     if (status === google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
         var request = {
@@ -62,11 +63,13 @@ var carte = {
             restoPlace.long = place.geometry.location.lng();
             restoPlace.ratingPlace = place.rating;
             restoPlace.ratings = [];
-            for (var i = 0; i < place.reviews.length; i++) {
-              var rating = {};
-              rating.stars = place.reviews[i].rating;
-              rating.comment = place.reviews[i].text;
-              restoPlace.ratings.push(rating);
+            if (place.reviews) {
+              for (var i = 0; i < place.reviews.length; i++) {
+                var rating = {};
+                rating.stars = place.reviews[i].rating;
+                rating.comment = place.reviews[i].text;
+                restoPlace.ratings.push(rating);
+              }
             }
             restaurants.afficher_descriptif(restoPlace);
           }
@@ -96,10 +99,17 @@ var carte = {
       navigator.geolocation.getCurrentPosition(function (position) {
         pos = {
           lat: position.coords.latitude,
-          lng: position.coords.longitude
+          lng: position.coords.longitude,
+
+          /* ------- valeurs pour test ----------- */
+          lat: 47.99587497208903,
+          lng: -4.103020533899553
+
         }
         map.setCenter(pos);
         carte.creer_marker(pos, "blue", "Vous êtes ici");
+        $('#restos li').remove();
+        carte.places(pos);
       });
     }
   }

@@ -1,6 +1,5 @@
 /* ---------- variables de l'application ----------- */
 
-// initialisation map avec coordonnées de Paris
 var cleMap = "AIzaSyBn5VqrB_xDjGcFUaoZ-rzR_Q6pB1g75kQ";
 var map;
 var service;
@@ -9,6 +8,8 @@ var pos = {
   lat: 48.88091655382385,
   lng: 2.3465631508483966
 };
+var zoom = 15;
+var radius = 500;
 var locations = [];
 var markers = [];
 var service;

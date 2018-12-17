@@ -1,6 +1,7 @@
 /* --------------- Appels aux fonctions ------------------ */
 
 carte.initMap();
-carte.geoloc();
 restaurants.creer_liste_restos();
+carte.places(pos);
+carte.geoloc();
 restaurants.filtrer_restaurants();

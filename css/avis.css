@@ -1,11 +1,13 @@
-#map, .main {
-  height: 100%;
-}
+@media screen and (min-width: 996px) {
+  #map, .main {
+    height: 100%;
+  }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 h3 {
@@ -26,4 +28,15 @@ h3 {
 
 .collapsible-header:hover, li.active .collapsible-header {
   background-color: #eeeeee;
+}
+
+@media screen and (max-width: 995px) {
+  .map {
+    width: 100%;
+  }
+
+  #map {
+    height: 400px;
+    width: 100%;
+  }
 }
