@@ -8,7 +8,7 @@ var pos = {
   lat: 48.88091655382385,
   lng: 2.3465631508483966
 };
-var zoom = 15;
+var zoom = 14;
 var radius = 500;
 var locations = [];
 var markers = [];
@@ -38,11 +38,10 @@ var monCommentaire = '';
 $('#validationNote').click(function() {
   monCommentaire = $('#monAvis').val();
   maNote = $('#monRateYo').rateYo('rating');
-  var cible = '#' + $('#idResto').val() + ' .collapsible-body';
-  var div = $(cible);
+  var cible = $('li.active').find('.collapsible-body');
   if (monCommentaire) {
-    var div_stars = $('<div>').addClass('stars').appendTo(div);
-    restaurants.ajouter_stars(maNote, monCommentaire, div_stars, $('#idResto').val());
+    var div_stars = $('<div>').addClass('stars').appendTo(cible);
+    restaurants.ajouter_stars(maNote, monCommentaire, div_stars, true);
   };
   $('#monRateYo').rateYo('rating', 3);
   $('#monAvis').val('');

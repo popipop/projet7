@@ -1,6 +1,6 @@
 var restaurants = {
 
-  // Afficher la liste des restaurants du fichier JSON
+  // Afficher la liste des restaurants à partir du fichier JSON
   creer_liste_restos: function () {
     $.getJSON("src/restaurants.json", function (json) {
       $.each(json, function (index, resto) {
@@ -13,12 +13,11 @@ var restaurants = {
   afficher_descriptif: function (resto) {
 
     // Générer le code html
-    var idResto = 'resto' + $('.collapsible li').length;
-    var li = $('<li>').attr('id', idResto).appendTo('#restos');
+    var li = $('<li>').appendTo('#restos');
     var divHeader = $('<div>').addClass('waves-effect collapsible-header').css('text-align', 'right').appendTo(li);
     $('<span>').text(resto.restaurantName).appendTo(divHeader);
-    var starsHeader = $('<span>').addClass('starsHeader').appendTo(divHeader);
-    var moyHeader = $('<span>').addClass('moyHeader').appendTo(divHeader);
+    $('<span>').addClass('starsHeader').appendTo(divHeader);
+    $('<span>').addClass('moyHeader').appendTo(divHeader);
     var div = $('<div>').addClass('collapsible-body').appendTo(li);
     var a = $('<a>').addClass("waves-effect waves-light btn avis").text('Donner mon avis').appendTo(div);
     var p = $('<p>').appendTo(div);
@@ -38,13 +37,12 @@ var restaurants = {
       lat: resto.lat,
       lng: resto.long
     };
-    this.afficher_moy(idResto, resto.ratingPlace);
+    this.afficher_moy(li, resto.ratingPlace);
     var numMarker = carte.creer_marker(position_resto, "red", resto.restaurantName);
     $('<input>').attr('type', 'hidden').addClass('numMarker').val(numMarker).appendTo(divHeader);
 
     // event click sur le bouton "donner mon avis"
     $(a).click(function() {
-      $('#idResto').val(idResto);
       $("#monRateYo").rateYo({
         rating: 3,
         fullStar: true
@@ -56,21 +54,21 @@ var restaurants = {
   },
 
   // Afficher la moyenne
-  afficher_moy: function (idResto, ratingPlace) {
-    var cible = '#' + idResto + ' .stars';
+  afficher_moy: function (elm, ratingPlace) {
+    var cible = elm.find('.stars');
     var moy = 0;
     if (ratingPlace) {
       moy = ratingPlace;
     } else {
-      $(cible).each(function (index, element) {
+      $(cible).each(function () {
         moy += Number($(this).find('.note').val());
       });
       if ($(cible).length != 0 || moy != 0) {
         moy = moy / $(cible).length;
       }
     }
-    var starsHeader = $('#'+idResto).find('.starsHeader');
-    var moyHeader = $('#'+idResto).find('.moyHeader');
+    var starsHeader = $(elm).find('.starsHeader');
+    var moyHeader = $(elm).find('.moyHeader');
     starsHeader.find('span').remove();
     if ($(cible).length != 0) {
       $('<span>').rateYo({
@@ -82,16 +80,16 @@ var restaurants = {
     $('<input>').attr('type','hidden').addClass('moyResto').val(moy).appendTo(moyHeader);
   },
 
-  // Ajouter étoiles
-  ajouter_stars: function (note, commentaire, element, idResto) {
+  // Afficher la note sous forme d'étoiles avec rateYo et le commentaire
+  ajouter_stars: function (note, commentaire, element, nouveau) {
     $('<p>').rateYo({
       rating: note,
       readOnly: true
     }).appendTo(element);
     $('<p>').text(commentaire).appendTo(element);
     $('<input>').attr('type', 'hidden').addClass('note').val(note).appendTo(element);
-    if (idResto) {
-      this.afficher_moy(idResto);
+    if (nouveau) {
+      this.afficher_moy(element.parent().parent());
     }
   },
 

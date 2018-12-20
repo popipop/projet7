@@ -9,13 +9,11 @@ var carte = {
 
     var geocoder = new google.maps.Geocoder;
 
-    // event click sur la carte
+    // event click sur la carte pour créer un nouveau restaurant
     map.addListener('click', function(e) {
       monResto = {};
       monResto.lat = e.latLng.lat();
       monResto.long = e.latLng.lng();
-      console.log('lat : '+ monResto.lat);
-      console.log('long : ' + monResto.long);
       monResto.ratings = [];
       $('#nomResto').val('');
       var elem = document.getElementById('modal1');
@@ -36,11 +34,11 @@ var carte = {
   },
 
   // initialisation api places
-  places: function (pos) {
+  places: function (position) {
     infowindow = new google.maps.InfoWindow();
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch({
-      location: pos,
+      location: position,
       radius: radius,
       type: ['restaurant']
     }, this.callback);
@@ -96,21 +94,35 @@ var carte = {
   // Gestion de la géolocalisation
   geoloc: function () {
     if(navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        pos = {
+      function success(position) {
+        var nPos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
 
           /* ------- valeurs pour test ----------- */
-          lat: 47.99587497208903,
-          lng: -4.103020533899553
+          //lat: 47.99587497208903,
+          //lng: -4.103020533899553
 
         }
-        map.setCenter(pos);
-        carte.creer_marker(pos, "blue", "Vous êtes ici");
+        map.setCenter(nPos);
+        carte.creer_marker(nPos, "blue", "Vous êtes ici");
         $('#restos li').remove();
-        carte.places(pos);
-      });
+        carte.places(nPos);
+      }
+
+      function error(err) {
+        if (err.code == 1) {
+          map.setCenter(pos);
+          $('#restos li').remove();
+          restaurants.creer_liste_restos();
+        }
+      }
+
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+      map.setCenter(pos);
+      $('#restos li').remove();
+      restaurants.creer_liste_restos();
     }
   }
 }
