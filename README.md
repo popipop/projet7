@@ -1,2 +1,3 @@
-# projet7
-projet oc : comparateur de restaurants
+# projet 7 Openclassrooms
+
+## Réalisation d'un comparateur de restaurants. Utilisation de l'API Google Map.
